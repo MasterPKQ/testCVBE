@@ -1,0 +1,31 @@
+{
+  "profile": {
+    "name": "A",
+    "contactInfo": { "mediaProfiles": [] },
+    "education": [],
+    "experiences": [
+      {
+        "title": "Dev",
+        "company": "X",
+        "description": ["Built APIs with Python and FastAPI"],
+        "duration": { "start": "2024", "end": "2024" },
+        "location": { "city": "", "country": "" },
+        "skills": [{ "name": "Python", "type": "Lang" }]
+      }
+    ],
+    "projects": [],
+    "extraCurriculars": [],
+    "otherSkills": [],
+    "otherAwards": [],
+    "hobbies": []
+  },
+  "job": {
+    "description": "Need Python and FastAPI"
+  },
+  "options": {
+    "addHighlights": true,
+    "addSkills": true
+  }
+}
+
+min

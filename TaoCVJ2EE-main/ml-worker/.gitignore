@@ -1,0 +1,146 @@
+# === Python & Virtual Environment ===
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# === Python Cache ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# === Jupyter Notebook ===
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# === IDE & Editor ===
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
+
+# === OS & System Files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === Logs & Runtime ===
+*.log
+logs/
+*.log.*
+temp/
+tmp/
+
+# === Environment Variables & Secrets ===
+.env
+.env.local
+.env.development
+.env.production
+.env.example
+app_secrets.py
+*.pem
+*.key
+*.crt
+*.cer
+*.jks
+
+# === Python Package Manager ===
+pip-log.txt
+pip-delete-this-directory.txt
+.pip_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.htmlcov/
+.parcel-cache
+
+# === Testing ===
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+pytestdebug.log
+
+# === Build & Distribution ===
+build/
+dist/
+*.egg-info/
+*.dist-info/
+*.whl
+*.tar.gz
+
+# === Database ===
+*.db
+*.sqlite3
+*.sqlite
+
+# === Large Files & Models (spaCy, ML, etc.) ===
+*.bin
+*.tar.gz
+*.zip
+*.gz
+*.pt
+*.pth
+*.pkl
+*.h5
+*.onnx
+*.joblib
+*.model
+
+# === Test Data (nếu không muốn commit) ===
+test_data/
+sample_data/
+data/
+datasets/
+
+# === Node / Frontend (nếu có) ===
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# === Docker ===
+Dockerfile*
+.dockerignore
+.docker/
+.docker-compose.override.yml
+
+# === Misc ===
+*.bak
+*.swp
+*~

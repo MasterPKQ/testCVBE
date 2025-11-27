@@ -1,0 +1,117 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: taocv-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_DATABASE: taocv_db
+      MYSQL_USER: taocv_user
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - taocv-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: taocv-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - taocv-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 5
+
+  # Spring Boot Application
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: taocv-spring-app:latest
+    container_name: taocv-spring-app
+    ports:
+      - "8080:8080"
+    environment:
+      # Database configuration
+      DB_URL: jdbc:mysql://mysql:3306/taocv_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      DB_USERNAME: taocv_user
+      DB_PASSWORD: 123456
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+      # Redis configuration
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+
+      # ML Worker URL
+      ML_WORKER_BASE_URL: http://ml-worker:8000
+
+      # Cloudinary configuration
+      CLOUDINARY_URL: ${CLOUDINARY_URL:-cloudinary://397693575887797:pkmiY3sybWVLyZd5EUaIBhXRYMc@dygibgnym}
+
+      # JWT and other secrets
+      JWT_SIGNER_KEY: ${JWT_SIGNER_KEY:-e4b7c29a8f0d3d7f5c12a9e74d53b8f6a7c4e1b2d9f0c3a87e5d1b9f6a2c4d8e}
+
+      # OAuth2
+      APP_OAUTH2_AUTHORIZED_REDIRECT_URIS: ${APP_OAUTH2_AUTHORIZED_REDIRECT_URIS:-http://localhost:3000/callback,http://127.0.0.1:3000/callback}
+
+      # OAuth2 Facebook
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_ID: ${FACEBOOK_CLIENT_ID:-2323520341417468}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_SECRET: ${FACEBOOK_CLIENT_SECRET:-ab896943eec42d247de256a0b3b73894}
+
+      # OAuth2 Google
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-156567771650-oc48bfn77aedd0pp2r52g880jai7g5lu.apps.googleusercontent.com}
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-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}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - taocv-network
+    restart: unless-stopped
+
+  # Python ML Worker
+  ml-worker:
+    build:
+      context: ./ml-worker
+      dockerfile: Dockerfile
+    image: taocv-ml-worker:latest
+    container_name: taocv-ml-worker
+    ports:
+      - "8000:8000"
+    environment:
+      # Google AI API Key (BẮT BUỘC)
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+      # OpenAI API Key nếu dùng
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    networks:
+      - taocv-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  taocv-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+  redis_data:

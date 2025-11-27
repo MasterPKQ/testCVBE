@@ -1,0 +1,11 @@
+google.generativeai
+langchain~=0.3.27
+pydantic~=2.12.2
+langchain_openai
+langchain-google-genai~=2.0.10
+fastapi[standard]~=0.119.0
+six
+spacy~=3.8.7
+scikit-learn~=1.7.2
+python-dotenv~=1.1.1
+langchain-core~=0.3.79

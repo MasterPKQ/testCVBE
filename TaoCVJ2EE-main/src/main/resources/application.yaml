@@ -1,0 +1,94 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+app:
+  oauth2:
+    authorized-redirect-uris: "http://localhost:3000/callback"
+#    "https://cv-builder-one-sage.vercel.app/callback,https://cv-builder-one-sage.vercel.app/callback"
+  templates:
+    path: ${TEMPLATES_PATH:d:/ProjectJ2EE/TaoCV/templates/}
+
+# Template System Configuration
+template:
+  storage:
+    path: ${TEMPLATE_STORAGE_PATH:src/main/resources/templates/cv}
+
+
+spring:
+  devtools:
+    restart:
+      enabled: false  # Tắt để tránh ClassCastException với Redis cache
+  datasource:
+    url: jdbc:mysql://localhost:3306/my_cv
+    username: root
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:update}
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        globally_quoted_identifiers: true
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            clientId: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_ID:2323520341417468}
+            clientSecret: ${SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_FACEBOOK_CLIENT_SECRET:ab896943eec42d247de256a0b3b73894}
+            scope:
+              - email
+              - public_profile
+              - user_birthday
+              - user_photos
+            authorization-grant-type: authorization_code
+            client-name: Facebook
+
+          google:
+            
+            scope:
+              - email
+              - profile
+              - openid
+            authorization-grant-type: authorization_code
+            client-name: Google
+       
+        provider:
+          facebook:
+            authorization-uri: https://www.facebook.com/v20.0/dialog/oauth
+            token-uri: https://graph.facebook.com/v20.0/oauth/access_token
+            user-info-uri: https://graph.facebook.com/me?fields=id,name,email,birthday,picture.type(large)
+            user-name-attribute: id
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+
+jwt:
+  signerKey: ${JWT_SIGNER_KEY:e4b7c29a8f0d3d7f5c12a9e74d53b8f6a7c4e1b2d9f0c3a87e5d1b9f6a2c4d8e}
+  valid-duration: 3600
+  refreshable-duration: 36000
+
+token:
+  cleanup:
+    interval: 3600000
+  expiration: 10S
+
+cloudinary:
+  url: cloudinary://397693575887797:pkmiY3sybWVLyZd5EUaIBhXRYMc@dygibgnym
+
+ml:
+  worker:
+    base-url: ${ML_WORKER_BASE_URL:http://localhost:8000}
+
+# Logging configuration
+logging:
+  level:
+    com.example.identity.service.TemplateService: DEBUG
+    org.springframework.cache: DEBUG
+
